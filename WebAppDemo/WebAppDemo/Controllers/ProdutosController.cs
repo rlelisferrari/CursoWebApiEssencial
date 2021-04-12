@@ -33,7 +33,10 @@ namespace WebAppDemo.Controllers
             return this.context.Produtos.AsNoTracking().ToList();
         }
 
-        [HttpGet("{id}", Name = "ObterProduto")]
+        //{id}/{param?}: parâmetro opcional
+        //{id}/{param=Mac}: se não passar parâmetro recebe parâmetro default "Mac"
+        //{id:int:min(1)}: restrição de rotas valores inteiros >= 1
+        [HttpGet("{id:int:min(1)}", Name = "ObterProduto")]
         public ActionResult<Produto> Get(int id)
         {
             var produto = this.context.Produtos.AsNoTracking().FirstOrDefault(p => p.ProdutoId == id);
