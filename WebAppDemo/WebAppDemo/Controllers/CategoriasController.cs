@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebAppDemo.Context;
@@ -27,17 +29,35 @@ namespace WebAppDemo.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<Categoria>> Get()
         {
-            //Desabilitar o rastreamento das consultas (aumenta o desempenho da api)
-            return this.context.Categorias.AsNoTracking().ToList();
+            try
+            {
+                //Desabilitar o rastreamento das consultas (aumenta o desempenho da api)
+                return this.context.Categorias.AsNoTracking().ToList();
+            }
+            catch (Exception)
+            {
+                return StatusCode(
+                    StatusCodes.Status500InternalServerError,
+                    "Erro ao tentar obter as categorias do banco de dados");
+            }
         }
 
         [HttpGet("{id}", Name = "ObterCategoria")]
         public ActionResult<Categoria> Get(int id)
         {
-            var categoria = this.context.Categorias.AsNoTracking().FirstOrDefault(p => p.CategoriaId == id);
-            if (categoria == null)
-                return NotFound();
-            return categoria;
+            try
+            {
+                var categoria = this.context.Categorias.AsNoTracking().FirstOrDefault(p => p.CategoriaId == id);
+                if (categoria == null)
+                    return NotFound($"A categoria com id={id} não foi encontrada");
+                return categoria;
+            }
+            catch (Exception)
+            {
+                return StatusCode(
+                    StatusCodes.Status500InternalServerError,
+                    "Erro ao tentar obter as categorias do banco de dados");
+            }
         }
 
         [HttpPost]
