@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using Newtonsoft.Json;
 using WebAppDemo.Context;
 
 namespace WebAppDemo
@@ -23,7 +24,11 @@ namespace WebAppDemo
         {
             string mySqlConnection = Configuration.GetConnectionString("DefaultConnection");
 
-            services.AddControllers().AddNewtonsoftJson();
+            services.AddControllers().AddNewtonsoftJson(options =>
+            {
+                options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
+            });
 
             services.AddDbContext<AppDbContext>(
                 options => options.UseMySql(mySqlConnection, ServerVersion.AutoDetect(mySqlConnection)));
