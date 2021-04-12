@@ -19,6 +19,13 @@ namespace WebAppDemo.Controllers
             this.context = context;
         }
 
+        [HttpGet("/first")]
+        public ActionResult<Produto> GetFirst()
+        {
+            //Desabilitar o rastreamento das consultas (aumenta o desempenho da api)
+            return this.context.Produtos.FirstOrDefault();
+        }
+
         [HttpGet]
         public ActionResult<IEnumerable<Produto>> Get()
         {

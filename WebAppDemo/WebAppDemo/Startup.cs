@@ -46,10 +46,13 @@ namespace WebAppDemo
             app.UseSwagger();
             app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "Curso Web Api Essential"); });
 
+            //adiciona o middleware de roteamento
             app.UseRouting();
 
+            //adiciona middleware que habilita a autorização
             app.UseAuthorization();
 
+            //adciona os endpoints para as Actions dos controladores sem especificar rotas
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
     }
