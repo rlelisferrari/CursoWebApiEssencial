@@ -7,6 +7,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using WebAppDemo.Context;
+using WebAppDemo.Extensions;
 
 namespace WebAppDemo
 {
@@ -24,11 +25,13 @@ namespace WebAppDemo
         {
             string mySqlConnection = Configuration.GetConnectionString("DefaultConnection");
 
-            services.AddControllers().AddNewtonsoftJson(options =>
-            {
-                options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-                options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
-            });
+            services.AddControllers()
+                .AddNewtonsoftJson(
+                    options =>
+                    {
+                        options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                        options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
+                    });
 
             services.AddDbContext<AppDbContext>(
                 options => options.UseMySql(mySqlConnection, ServerVersion.AutoDetect(mySqlConnection)));
@@ -45,6 +48,9 @@ namespace WebAppDemo
 
             app.UseSwagger();
             app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "Curso Web Api Essential"); });
+
+            //adiciona o middleware de tratamento de erro
+            app.ConfigureExceptionHandler();
 
             //adiciona o middleware de roteamento
             app.UseRouting();

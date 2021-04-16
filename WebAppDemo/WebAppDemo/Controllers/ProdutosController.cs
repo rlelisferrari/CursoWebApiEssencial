@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebAppDemo.Context;
@@ -20,29 +21,28 @@ namespace WebAppDemo.Controllers
         }
 
         [HttpGet("/first")]
-        public ActionResult<Produto> GetFirst()
+        public async Task<ActionResult<Produto>> GetFirst()
         {
-            //Desabilitar o rastreamento das consultas (aumenta o desempenho da api)
-            return this.context.Produtos.FirstOrDefault();
+            return (await this.context.Produtos.ToListAsync()).FirstOrDefault();
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<Produto>> Get()
+        public async Task<ActionResult<IEnumerable<Produto>>> Get()
         {
             //Desabilitar o rastreamento das consultas (aumenta o desempenho da api)
-            return this.context.Produtos.AsNoTracking().ToList();
+            return await this.context.Produtos.AsNoTracking().ToListAsync();
         }
 
         //{id}/{param?}: parâmetro opcional
         //{id}/{param=Mac}: se não passar parâmetro recebe parâmetro default "Mac"
         //{id:int:min(1)}: restrição de rotas valores inteiros >= 1
         [HttpGet("{id:int:min(1)}", Name = "ObterProduto")]
-        public ActionResult<Produto> Get(int id)
+        public IActionResult Get([FromQuery] int id)
         {
             var produto = this.context.Produtos.AsNoTracking().FirstOrDefault(p => p.ProdutoId == id);
             if (produto == null)
                 return NotFound();
-            return produto;
+            return Ok(produto);
         }
 
         [HttpPost]
