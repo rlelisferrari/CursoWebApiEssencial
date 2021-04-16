@@ -1,9 +1,11 @@
+using ApiCatalogo.Logging;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using WebAppDemo.Context;
@@ -41,13 +43,18 @@ namespace WebAppDemo
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
             if (env.IsDevelopment())
                 app.UseDeveloperExceptionPage();
 
             app.UseSwagger();
             app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "Curso Web Api Essential"); });
+
+            loggerFactory.AddProvider(new CustomLoggerProvider(new CustomLoggerProviderConfiguration
+            {
+                LogLevel = LogLevel.Information
+            }));
 
             //adiciona o middleware de tratamento de erro
             app.ConfigureExceptionHandler();

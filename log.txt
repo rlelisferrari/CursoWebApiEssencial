@@ -1,0 +1,21 @@
+Information: 0 - Application started. Press Ctrl+C to shut down.
+Information: 0 - Hosting environment: Development
+Information: 0 - Content root path: D:\CursoMacoratti\WebAppDemo\WebAppDemo
+Information: 0 - Método GetFirst
+Information: 0 - System.Collections.Generic.List`1[WebAppDemo.Models.Produto]
+Information: 0 - Método GET: Numero de produtos 2
+Information: 0 - Application started. Press Ctrl+C to shut down.
+Information: 0 - Hosting environment: Development
+Information: 0 - Content root path: D:\CursoMacoratti\WebAppDemo\WebAppDemo
+Information: 0 - Método GetFirst
+Information: 0 - System.Collections.Generic.List`1[WebAppDemo.Models.Produto]
+Information: 0 - Application started. Press Ctrl+C to shut down.
+Information: 0 - Hosting environment: Development
+Information: 0 - Content root path: D:\CursoMacoratti\WebAppDemo\WebAppDemo
+Information: 0 - Método GetFirst
+Information: 0 - {"ProdutoId":1,"Nome":"Camarão","Descricao":"1 kg camarão limpo","Preco":50.000000000000000000000000000,"ImagemUrl":"imagem","Estoque":10.0,"DataCadastro":"2021-04-12T15:59:32","Categoria":null,"CategoriaId":1}
+Information: 0 - Application started. Press Ctrl+C to shut down.
+Information: 0 - Hosting environment: Development
+Information: 0 - Content root path: D:\CursoMacoratti\WebAppDemo\WebAppDemo
+Information: 0 - Método GetFirst
+Information: 0 - WebAppDemo.Models.Produto

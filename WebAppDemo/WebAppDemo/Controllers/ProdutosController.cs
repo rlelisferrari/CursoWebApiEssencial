@@ -26,14 +26,17 @@ namespace WebAppDemo.Controllers
         [HttpGet("/first")]
         public async Task<ActionResult<Produto>> GetFirst()
         {
-            return (await this.context.Produtos.ToListAsync()).FirstOrDefault();
+            var produto = await this.context.Produtos.ToListAsync();
+            this.logger.LogInformation($"Método GetFirst");
+            this.logger.LogInformation(produto.FirstOrDefault().ToString());
+            return produto.FirstOrDefault();
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Produto>>> Get()
         {
             var produtos = await this.context.Produtos.AsNoTracking().ToListAsync();
-            this.logger.LogInformation($"========================Numero de produtos {produtos.Count}");
+            this.logger.LogInformation($"Método GET: Numero de produtos {produtos.Count}");
             //Desabilitar o rastreamento das consultas (aumenta o desempenho da api)
             return produtos;
         }
