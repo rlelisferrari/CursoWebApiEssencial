@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using WebAppDemo.Context;
 using WebAppDemo.Models;
 
@@ -14,10 +15,12 @@ namespace WebAppDemo.Controllers
     public class ProdutosController : ControllerBase
     {
         private readonly AppDbContext context;
+        private readonly ILogger logger;
 
-        public ProdutosController(AppDbContext context)
+        public ProdutosController(AppDbContext context, ILogger<ProdutosController> logger)
         {
             this.context = context;
+            this.logger = logger;
         }
 
         [HttpGet("/first")]
@@ -29,8 +32,10 @@ namespace WebAppDemo.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Produto>>> Get()
         {
+            var produtos = await this.context.Produtos.AsNoTracking().ToListAsync();
+            this.logger.LogInformation($"========================Numero de produtos {produtos.Count}");
             //Desabilitar o rastreamento das consultas (aumenta o desempenho da api)
-            return await this.context.Produtos.AsNoTracking().ToListAsync();
+            return produtos;
         }
 
         //{id}/{param?}: parâmetro opcional
