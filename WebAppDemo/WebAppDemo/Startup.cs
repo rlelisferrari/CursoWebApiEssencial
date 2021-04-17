@@ -1,4 +1,4 @@
-using ApiCatalogo.Logging;
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -9,7 +9,9 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using WebAppDemo.Context;
+using WebAppDemo.DTOs.Mappings;
 using WebAppDemo.Extensions;
+using WebAppDemo.Logging;
 
 namespace WebAppDemo
 {
@@ -26,6 +28,14 @@ namespace WebAppDemo
         public void ConfigureServices(IServiceCollection services)
         {
             string mySqlConnection = Configuration.GetConnectionString("DefaultConnection");
+
+            var mappingConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new MappingProfile());
+            });
+
+            IMapper mapper = mappingConfig.CreateMapper();
+            services.AddSingleton(mapper);
 
             services.AddControllers()
                 .AddNewtonsoftJson(

@@ -19,3 +19,19 @@ Information: 0 - Hosting environment: Development
 Information: 0 - Content root path: D:\CursoMacoratti\WebAppDemo\WebAppDemo
 Information: 0 - Método GetFirst
 Information: 0 - WebAppDemo.Models.Produto
+Information: 0 - Application started. Press Ctrl+C to shut down.
+Information: 0 - Hosting environment: Development
+Information: 0 - Content root path: D:\CursoMacoratti\WebAppDemo\WebAppDemo
+Information: 0 - Application is shutting down...
+Information: 0 - Application started. Press Ctrl+C to shut down.
+Information: 0 - Hosting environment: Development
+Information: 0 - Content root path: D:\CursoMacoratti\WebAppDemo\WebAppDemo
+Information: 0 - Application started. Press Ctrl+C to shut down.
+Information: 0 - Hosting environment: Development
+Information: 0 - Content root path: D:\CursoMacoratti\WebAppDemo\WebAppDemo
+Information: 0 - Application started. Press Ctrl+C to shut down.
+Information: 0 - Hosting environment: Development
+Information: 0 - Content root path: D:\CursoMacoratti\WebAppDemo\WebAppDemo
+Information: 0 - Application started. Press Ctrl+C to shut down.
+Information: 0 - Hosting environment: Development
+Information: 0 - Content root path: D:\CursoMacoratti\WebAppDemo\WebAppDemo

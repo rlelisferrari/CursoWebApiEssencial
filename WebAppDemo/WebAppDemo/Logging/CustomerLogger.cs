@@ -2,7 +2,7 @@
 using System.IO;
 using Microsoft.Extensions.Logging;
 
-namespace ApiCatalogo.Logging
+namespace WebAppDemo.Logging
 {
     public class CustomerLogger : ILogger
     {

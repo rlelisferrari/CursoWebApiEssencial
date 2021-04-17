@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebAppDemo.Context;
+using WebAppDemo.DTOs;
 using WebAppDemo.Models;
 
 namespace WebAppDemo.Controllers
@@ -14,10 +16,12 @@ namespace WebAppDemo.Controllers
     public class CategoriasController : ControllerBase
     {
         private readonly AppDbContext context;
+        private readonly IMapper mapper;
 
-        public CategoriasController(AppDbContext context)
+        public CategoriasController(AppDbContext context, IMapper mapper)
         {
             this.context = context;
+            this.mapper = mapper;
         }
 
         [HttpGet("produtos")]
@@ -27,12 +31,14 @@ namespace WebAppDemo.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<Categoria>> Get()
+        public ActionResult<IEnumerable<CategoriaDTO>> Get()
         {
             try
             {
-                //Desabilitar o rastreamento das consultas (aumenta o desempenho da api)
-                return this.context.Categorias.AsNoTracking().ToList();
+                //AsNoTracking: Desabilitar o rastreamento das consultas (aumenta o desempenho da api)
+                var categorias = context.Categorias.AsNoTracking().ToList();
+                var categoriasDto = this.mapper.Map<List<CategoriaDTO>>(categorias);
+                return categoriasDto;
             }
             catch (Exception)
             {
@@ -43,14 +49,15 @@ namespace WebAppDemo.Controllers
         }
 
         [HttpGet("{id}", Name = "ObterCategoria")]
-        public ActionResult<Categoria> Get(int id)
+        public ActionResult<CategoriaDTO> Get(int id)
         {
             try
             {
                 var categoria = this.context.Categorias.AsNoTracking().FirstOrDefault(p => p.CategoriaId == id);
                 if (categoria == null)
                     return NotFound($"A categoria com id={id} não foi encontrada");
-                return categoria;
+                var categoriaDto = this.mapper.Map<CategoriaDTO>(categoria);
+                return categoriaDto;
             }
             catch (Exception)
             {
@@ -61,25 +68,41 @@ namespace WebAppDemo.Controllers
         }
 
         [HttpPost]
-        public ActionResult Post([FromBody] Categoria categoria)
+        public ActionResult Post([FromBody] CategoriaDTO categoriaDto)
         {
-            this.context.Add(categoria);
+            var categoria = this.mapper.Map<Categoria>(categoriaDto);
+
+            this.context.Categorias.Add(categoria);
             this.context.SaveChanges();
-            return new CreatedAtRouteResult("ObterCategoria", new {id = categoria.CategoriaId}, categoria);
+
+            var categoriaDTO = this.mapper.Map<CategoriaDTO>(categoria);
+
+            return new CreatedAtRouteResult(
+                "ObterCategoria",
+                new {id = categoria.CategoriaId},
+                categoriaDTO);
         }
 
         [HttpPut("{id}")]
-        public ActionResult Put(int id, [FromBody] Categoria categoria)
+        public ActionResult Put(int id, [FromBody] CategoriaDTO categoriaDto)
         {
+            if (id != categoriaDto.CategoriaId)
+            {
+                return BadRequest();
+            }
+
+            var categoria = this.mapper.Map<Categoria>(categoriaDto);
+            
             //altera o estado da entidade oara modified
             this.context.Entry(categoria).State = EntityState.Modified;
+
             //aplica as alterações no banco
             this.context.SaveChanges();
             return Ok();
         }
 
         [HttpDelete("{id}")]
-        public ActionResult<Categoria> Delete(int id)
+        public ActionResult<CategoriaDTO> Delete(int id)
         {
             //busca direto no banco de dados
             var categoria = this.context.Categorias.FirstOrDefault(p => p.CategoriaId == id);
@@ -92,7 +115,9 @@ namespace WebAppDemo.Controllers
 
             this.context.Categorias.Remove(categoria);
             this.context.SaveChanges();
-            return categoria;
+            var categoriaDto = this.mapper.Map<CategoriaDTO>(categoria);
+
+            return categoriaDto;
         }
     }
 }
