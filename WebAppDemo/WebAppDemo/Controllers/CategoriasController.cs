@@ -24,10 +24,12 @@ namespace WebAppDemo.Controllers
             this.mapper = mapper;
         }
 
-        [HttpGet("produtos")]
-        public ActionResult<IEnumerable<Categoria>> GetAll()
+        [HttpGet("categorias")]
+        public ActionResult<IEnumerable<CategoriaDTO>> GetAll()
         {
-            return this.context.Categorias.Include(item => item.Produtos).ToList();
+            var categorias = this.context.Categorias.Include(item => item.Produtos).ToList();
+            var categoriasDto = this.mapper.Map<List<CategoriaDTO>>(categorias);
+            return categoriasDto;
         }
 
         [HttpGet]
